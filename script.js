@@ -17,22 +17,28 @@ async function fetchData() {
 function searchIMEI() {
   const imei = document.getElementById("imeiInput").value.trim();
   const resultDiv = document.getElementById("result");
-  const found = data.find(row => row[4] === imei);
 
-  if (found) {
-    resultDiv.innerHTML = `
-      <strong>📦 TAG:</strong> ${found[0]}<br>
-      <strong>✅ ENTERED IN AM:</strong> ${found[1]}<br>
-      <strong>📅 RECEIVED:</strong> ${found[2]}<br>
-      <strong>🔗 USPS Tracking:</strong> <a href="https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=${found[3]}" target="_blank">${found[3]}</a><br>
-      <strong>🔍 IMEI:</strong> ${found[4]}<br>
-      <strong>📱 Device:</strong> ${found[5]}<br>
-      <strong>🛠️ Condition:</strong> ${found[6]}<br>
-      <strong>📝 Notes:</strong> ${found[7]}
-    `;
+  const matches = data.filter(row => row[4] === imei);
+
+  if (matches.length > 0) {
+    let html = `<h3>🔍 Found ${matches.length} record(s) for IMEI: ${imei}</h3>`;
+    matches.forEach((found, index) => {
+      html += `
+        <div class="result-block">
+          <strong>📦 TAG:</strong> ${found[0]}<br>
+          <strong>✅ ENTERED IN AM:</strong> ${found[1]}<br>
+          <strong>📅 RECEIVED:</strong> ${found[2]}<br>
+          <strong>🔗 USPS Tracking:</strong> <a href="https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=${found[3]}" target="_blank">${found[3]}</a><br>
+          <strong>📱 Device:</strong> ${found[5]}<br>
+          <strong>🛠️ Condition:</strong> ${found[6]}<br>
+          <strong>📝 Notes:</strong> ${found[7]}
+          <hr />
+        </div>
+      `;
+    });
+    resultDiv.innerHTML = html;
   } else {
     resultDiv.innerHTML = `<span style="color:red;">❌ IMEI not found. Please check and try again.</span>`;
   }
-}
 
 fetchData();
