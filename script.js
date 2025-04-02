@@ -8,7 +8,7 @@ async function fetchData() {
   const rows = text.split('\n').slice(1).map(row => row.split(','));
   data = rows;
 
-  // Find latest date from RECEIVED column (index 2)
+  // Find latest RECEIVED date (column index 2)
   const dates = rows.map(r => new Date(r[2])).filter(d => !isNaN(d));
   const latestDate = new Date(Math.max.apply(null, dates));
   document.getElementById("lastUpdated").innerText = `📅 Last Updated: ${latestDate.toDateString()}`;
@@ -22,7 +22,7 @@ function searchIMEI() {
 
   if (matches.length > 0) {
     let html = `<h3>🔍 Found ${matches.length} record(s) for IMEI: ${imei}</h3>`;
-    matches.forEach((found, index) => {
+    matches.forEach((found) => {
       html += `
         <div class="result-block">
           <strong>📦 TAG:</strong> ${found[0]}<br>
@@ -40,5 +40,6 @@ function searchIMEI() {
   } else {
     resultDiv.innerHTML = `<span style="color:red;">❌ IMEI not found. Please check and try again.</span>`;
   }
+}
 
 fetchData();
